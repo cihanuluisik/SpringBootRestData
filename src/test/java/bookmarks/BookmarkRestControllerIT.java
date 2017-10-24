@@ -86,6 +86,7 @@ public class BookmarkRestControllerIT {
         ResponseEntity<Bookmark> result = testRestTemplate.getForEntity(urlToCall, Bookmark .class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
         assertThat(result.getBody()).isEqualToIgnoringGivenFields(bookmark, "account");
     }
 
@@ -102,6 +103,8 @@ public class BookmarkRestControllerIT {
         // or ResponseEntity<Bookmark[]> result2=    testRestTemplate.getForEntity(urlToCall, Bookmark[].class);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
+
         assertThat(result.getBody()).hasSize(bookmarkList.size());
         assertThat(result.getBody().get(0)).isEqualToIgnoringGivenFields(bookmarkList.get(0), "account");
         assertThat(result.getBody().get(1)).isEqualToIgnoringGivenFields(bookmarkList.get(1), "account");
