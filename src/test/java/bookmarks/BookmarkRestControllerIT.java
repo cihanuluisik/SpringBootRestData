@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.awt.print.Book;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +111,7 @@ public class BookmarkRestControllerIT {
         assertThat(result.getBody().get(1)).isEqualToIgnoringGivenFields(bookmarkList.get(1), "account");
     }
 
+
     @Test
     public void givenABookmarkPostedToCreateThenShouldCreate() throws Exception {
 
@@ -121,6 +123,27 @@ public class BookmarkRestControllerIT {
         ResponseEntity<Bookmark> result = testRestTemplate.postForEntity(urlToCall, bookmark, Bookmark.class );
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(result.getHeaders().getLocation().toString()).startsWith(urlToCall + "/");
+
+    }
+
+    @Test
+    public void givenABookmarkPostedToCreateThenShouldCreateAndGetByLocationReturnedFromCreate() throws Exception {
+
+        Bookmark bookmark = new Bookmark(
+                this.account, "http://spring.io", "a bookmark to the best resource for Spring news and information");
+
+        String urlToCall = base + userName + "/bookmarks";
+
+        ResponseEntity<Bookmark> saveResult = testRestTemplate.postForEntity(urlToCall, bookmark, Bookmark.class );
+
+        assertThat(saveResult.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
+        ResponseEntity<Bookmark> result = testRestTemplate.getForEntity(saveResult.getHeaders().getLocation(), Bookmark .class);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
+        assertThat(result.getBody()).isEqualToIgnoringGivenFields(bookmark, "account" ,"id");
 
     }
 
