@@ -75,8 +75,11 @@ public class BookmarkRestControllerIT {
 
     @Test
     public void userNotFound() throws Exception {
-        ResponseEntity<Object> result = testRestTemplate.getForEntity(base + "/george/bookmarks/", Object.class);
+        String notExistingUser = "userBBBCCCDDDDD";
+        ResponseEntity<UserNotFoundException> result = testRestTemplate.getForEntity(base + "/" + notExistingUser + "/bookmarks/", UserNotFoundException.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(result.getBody().getMessage()).isEqualTo(notExistingUser);
+
     }
 
     @Test
