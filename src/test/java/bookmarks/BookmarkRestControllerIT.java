@@ -71,7 +71,7 @@ public class BookmarkRestControllerIT {
         String notExistingUser = "userBBBCCCDDDDD";
         ResponseEntity<ApiError> result = testRestTemplate.getForEntity(base + "/" + notExistingUser + "/bookmarks/", ApiError.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(result.getBody().getMessage()).isEqualTo(notExistingUser);
+        assertThat(result.getBody().getMessage()).startsWith(notExistingUser);
 
     }
 

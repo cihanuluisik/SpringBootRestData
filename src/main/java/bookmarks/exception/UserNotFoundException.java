@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UserNotFoundException extends ApiBaseException {
 
     public UserNotFoundException(String userId) {
-        super(userId);
+        super(userId +  " not found");
     }
 
 }
