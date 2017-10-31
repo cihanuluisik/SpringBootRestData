@@ -1,5 +1,6 @@
 package bookmarks;
 
+import bookmarks.exception.UserNotFoundException;
 import bookmarks.repository.AccountRepository;
 import bookmarks.repository.Bookmark;
 import bookmarks.repository.BookmarkRepository;

@@ -1,10 +1,11 @@
 package bookmarks;
 
+import bookmarks.exception.ApiError;
+import bookmarks.exception.UserNotFoundException;
 import bookmarks.repository.Account;
 import bookmarks.repository.AccountRepository;
 import bookmarks.repository.Bookmark;
 import bookmarks.repository.BookmarkRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,14 +18,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.awt.print.Book;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +29,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -76,7 +69,7 @@ public class BookmarkRestControllerIT {
     @Test
     public void userNotFound() throws Exception {
         String notExistingUser = "userBBBCCCDDDDD";
-        ResponseEntity<UserNotFoundException> result = testRestTemplate.getForEntity(base + "/" + notExistingUser + "/bookmarks/", UserNotFoundException.class);
+        ResponseEntity<ApiError> result = testRestTemplate.getForEntity(base + "/" + notExistingUser + "/bookmarks/", ApiError.class);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(result.getBody().getMessage()).isEqualTo(notExistingUser);
 
